@@ -4,6 +4,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import carRoutes from './routes/carRoutes';
 import managerRoutes from './routes/managerRoutes';
+import authRoutes from './routes/authRoutes';
+import categoryRoutes from './routes/categoryRoutes';
 import { connectDB } from './database/connection';
 
 // Load environment variables
@@ -25,5 +27,7 @@ connectDB();
 
 app.use('/api/cars', carRoutes);
 app.use('/api/managers', managerRoutes);
+app.use('/auth', authRoutes);
+app.use('/api/categories', categoryRoutes);
 
 export default app; 
