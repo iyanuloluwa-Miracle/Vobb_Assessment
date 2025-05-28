@@ -1,24 +1,31 @@
-import Car from '../models/Car';
+import { Car, ICar } from '../models/Car';
 
-export const createCar = async (carData: any) => {
-  return await Car.create(carData);
+export const createCar = async (carData: Partial<ICar>) => {
+  const car = new Car(carData);
+  return await car.save();
 };
 
-export const getCars = async (filters: any, page: number, limit: number) => {
-  const cars = await Car.find(filters)
-    .skip((page - 1) * limit)
-    .limit(limit)
-    .populate('category');
-  const total = await Car.countDocuments(filters);
-  return { cars, total };
+export const getCars = async (filter: any = {}, page: number = 1, limit: number = 10) => {
+  const skip = (page - 1) * limit;
+  const cars = await Car.find(filter)
+    .populate('category')
+    .skip(skip)
+    .limit(limit);
+  const total = await Car.countDocuments(filter);
+  return {
+    cars,
+    total,
+    page,
+    totalPages: Math.ceil(total / limit)
+  };
 };
 
 export const getCarById = async (id: string) => {
   return await Car.findById(id).populate('category');
 };
 
-export const updateCar = async (id: string, updateData: any) => {
-  return await Car.findByIdAndUpdate(id, updateData, { new: true });
+export const updateCar = async (id: string, carData: Partial<ICar>) => {
+  return await Car.findByIdAndUpdate(id, carData, { new: true }).populate('category');
 };
 
 export const deleteCar = async (id: string) => {

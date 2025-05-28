@@ -1,9 +1,9 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import Manager from '../models/Manager';
-import Customer from '../models/Customer';
+import { Manager, IManager } from '../models/Manager';
+import { Customer, ICustomer } from '../models/Customer';
 
-export const registerManager = async (managerData: any) => {
+export const registerManager = async (managerData: Partial<IManager>) => {
   const { name, email, password } = managerData;
   
   // Check if manager already exists
@@ -12,15 +12,9 @@ export const registerManager = async (managerData: any) => {
     throw new Error('Manager already exists');
   }
 
-  // Hash password
-  const hashedPassword = await bcrypt.hash(password, 10);
-  
   // Create manager
-  const manager = await Manager.create({
-    name,
-    email,
-    password: hashedPassword
-  });
+  const manager = new Manager({ name, email, password });
+  await manager.save();
 
   // Generate token
   const token = jwt.sign(
@@ -40,8 +34,8 @@ export const loginManager = async (email: string, password: string) => {
   }
 
   // Check password
-  const isValidPassword = await bcrypt.compare(password, manager.password);
-  if (!isValidPassword) {
+  const isMatch = await manager.comparePassword(password);
+  if (!isMatch) {
     throw new Error('Invalid credentials');
   }
 
@@ -55,7 +49,7 @@ export const loginManager = async (email: string, password: string) => {
   return { manager, token };
 };
 
-export const registerCustomer = async (customerData: any) => {
+export const registerCustomer = async (customerData: Partial<ICustomer>) => {
   const { name, email, password } = customerData;
   
   // Check if customer already exists
@@ -64,15 +58,9 @@ export const registerCustomer = async (customerData: any) => {
     throw new Error('Customer already exists');
   }
 
-  // Hash password
-  const hashedPassword = await bcrypt.hash(password, 10);
-  
   // Create customer
-  const customer = await Customer.create({
-    name,
-    email,
-    password: hashedPassword
-  });
+  const customer = new Customer({ name, email, password });
+  await customer.save();
 
   // Generate token
   const token = jwt.sign(
@@ -92,8 +80,8 @@ export const loginCustomer = async (email: string, password: string) => {
   }
 
   // Check password
-  const isValidPassword = await bcrypt.compare(password, customer.password);
-  if (!isValidPassword) {
+  const isMatch = await customer.comparePassword(password);
+  if (!isMatch) {
     throw new Error('Invalid credentials');
   }
 
@@ -105,4 +93,58 @@ export const loginCustomer = async (email: string, password: string) => {
   );
 
   return { customer, token };
+};
+
+export const login = async (email: string, password: string) => {
+  const manager = await Manager.findOne({ email });
+  if (!manager) {
+    throw new Error('Invalid email or password');
+  }
+
+  const isMatch = await manager.comparePassword(password);
+  if (!isMatch) {
+    throw new Error('Invalid email or password');
+  }
+
+  const token = jwt.sign(
+    { id: manager._id, email: manager.email, role: manager.role },
+    process.env.JWT_SECRET || 'supersecretkey',
+    { expiresIn: '24h' }
+  );
+
+  return {
+    token,
+    manager: {
+      id: manager._id,
+      name: manager.name,
+      email: manager.email,
+      role: manager.role
+    }
+  };
+};
+
+export const register = async (managerData: Partial<IManager>) => {
+  const existingManager = await Manager.findOne({ email: managerData.email });
+  if (existingManager) {
+    throw new Error('Email already registered');
+  }
+
+  const manager = new Manager(managerData);
+  await manager.save();
+
+  const token = jwt.sign(
+    { id: manager._id, email: manager.email, role: manager.role },
+    process.env.JWT_SECRET || 'supersecretkey',
+    { expiresIn: '24h' }
+  );
+
+  return {
+    token,
+    manager: {
+      id: manager._id,
+      name: manager.name,
+      email: manager.email,
+      role: manager.role
+    }
+  };
 }; 

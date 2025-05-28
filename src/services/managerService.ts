@@ -1,27 +1,31 @@
-import Manager from '../models/Manager';
+import { Manager, IManager } from '../models/Manager';
 import bcrypt from 'bcryptjs';
 
-export const createManager = async (managerData: any) => {
-  const { name, email, password } = managerData;
-  const hashedPassword = await bcrypt.hash(password, 10);
-  return await Manager.create({ name, email, password: hashedPassword });
+export const createManager = async (managerData: Partial<IManager>) => {
+  const manager = new Manager(managerData);
+  return await manager.save();
 };
 
-export const getManagers = async () => {
-  return await Manager.find();
+export const getManagers = async (page: number = 1, limit: number = 10) => {
+  const skip = (page - 1) * limit;
+  const managers = await Manager.find()
+    .skip(skip)
+    .limit(limit);
+  const total = await Manager.countDocuments();
+  return {
+    managers,
+    total,
+    page,
+    totalPages: Math.ceil(total / limit)
+  };
 };
 
 export const getManagerById = async (id: string) => {
   return await Manager.findById(id);
 };
 
-export const updateManager = async (id: string, updateData: any) => {
-  const { password, ...rest } = updateData;
-  let data = { ...rest };
-  if (password) {
-    data.password = await bcrypt.hash(password, 10);
-  }
-  return await Manager.findByIdAndUpdate(id, data, { new: true });
+export const updateManager = async (id: string, updateData: Partial<IManager>) => {
+  return await Manager.findByIdAndUpdate(id, updateData, { new: true });
 };
 
 export const deleteManager = async (id: string) => {
