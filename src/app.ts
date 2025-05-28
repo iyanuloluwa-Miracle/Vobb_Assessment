@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import carRoutes from './routes/carRoutes';
 import managerRoutes from './routes/managerRoutes';
+import { connectDB } from './database/connection';
 
 // Load environment variables
 dotenv.config();
@@ -20,10 +21,7 @@ app.get('/', (req, res) => {
 });
 
 // MongoDB connection
-const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/car_dealership';
-mongoose.connect(mongoUri)
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+connectDB();
 
 app.use('/api/cars', carRoutes);
 app.use('/api/managers', managerRoutes);

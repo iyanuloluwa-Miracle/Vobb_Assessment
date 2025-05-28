@@ -6,13 +6,14 @@ import {
   updateManager,
   deleteManager,
 } from '../controllers/managerController';
+import { auth } from '../middlewares/auth';
 
 const router = Router();
 
-router.post('/', createManager);
-router.get('/', getManagers);
-router.get('/:id', getManagerById);
-router.put('/:id', updateManager);
-router.delete('/:id', deleteManager);
+router.post('/', auth, createManager);
+router.get('/', auth, getManagers);
+router.get('/:id', auth, getManagerById);
+router.put('/:id', auth, updateManager);
+router.delete('/:id', auth, deleteManager);
 
 export default router; 
