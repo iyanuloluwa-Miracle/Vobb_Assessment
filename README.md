@@ -1,6 +1,6 @@
-# Vobb API
+# Vobb Backend Accessment
 
-A robust authentication service built with Node.js, TypeScript, and MongoDB.
+Build a simple RESTful API for a car dealership to manage cars, categories, and customers.
 
 ## 🔗 Quick Links
 
@@ -11,6 +11,9 @@ A robust authentication service built with Node.js, TypeScript, and MongoDB.
 
 - User Authentication (JWT-based)
 - Role-based Authorization (Managers & Customers)
+- Car Management System
+- Category Management
+- Customer Management
 - Secure Password Hashing
 - TypeScript Support
 - MongoDB Integration
@@ -70,41 +73,92 @@ Before you begin, ensure you have the following installed:
 ### Authentication
 
 #### Manager Routes
-```
-POST /api/auth/manager/register
-POST /api/auth/manager/login
+```http
+POST /api/auth/manager/register  - Register a new manager
+POST /api/auth/manager/login     - Login as manager
 ```
 
 #### Customer Routes
-```
-POST /api/auth/customer/register
-POST /api/auth/customer/login
-```
-
-### Request & Response Examples
-
-#### Register Manager
 ```http
-POST /api/auth/manager/register
-Content-Type: application/json
+POST /api/auth/customer/register - Register a new customer
+POST /api/auth/customer/login    - Login as customer
+```
 
+### Cars Management
+
+```http
+GET    /api/cars                 - Get all cars
+GET    /api/cars/:id            - Get a specific car
+POST   /api/cars                - Add a new car (Manager only)
+PUT    /api/cars/:id            - Update a car (Manager only)
+DELETE /api/cars/:id            - Delete a car (Manager only)
+GET    /api/cars/category/:id   - Get cars by category
+```
+
+#### Example Car Request Body
+```json
 {
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "securepassword123"
+  "name": "Toyota Camry",
+  "model": "2023",
+  "price": 25000,
+  "categoryId": "category_id",
+  "description": "Comfortable sedan with great fuel efficiency",
+  "specifications": {
+    "engine": "2.5L 4-cylinder",
+    "transmission": "Automatic",
+    "fuelType": "Gasoline"
+  },
+  "images": ["url1", "url2"],
+  "available": true
 }
 ```
 
-Response:
+### Categories Management
+
+```http
+GET    /api/categories          - Get all categories
+GET    /api/categories/:id      - Get a specific category
+POST   /api/categories          - Create a category (Manager only)
+PUT    /api/categories/:id      - Update a category (Manager only)
+DELETE /api/categories/:id      - Delete a category (Manager only)
+```
+
+#### Example Category Request Body
 ```json
 {
-  "manager": {
-    "id": "manager_id",
-    "name": "John Doe",
-    "email": "john@example.com",
-    "role": "manager"
-  },
-  "token": "jwt_token"
+  "name": "Sedan",
+  "description": "Four-door passenger car",
+  "features": ["Comfortable", "Fuel Efficient", "Family Friendly"]
+}
+```
+
+### Customer Management
+
+```http
+GET    /api/customers           - Get all customers (Manager only)
+GET    /api/customers/:id       - Get customer profile
+PUT    /api/customers/:id       - Update customer profile
+DELETE /api/customers/:id       - Delete customer account
+```
+
+### Bookings/Inquiries
+
+```http
+POST   /api/bookings           - Create a booking request
+GET    /api/bookings           - Get all bookings (Manager sees all, Customer sees own)
+GET    /api/bookings/:id       - Get specific booking details
+PUT    /api/bookings/:id       - Update booking status (Manager only)
+DELETE /api/bookings/:id       - Cancel booking
+```
+
+#### Example Booking Request Body
+```json
+{
+  "carId": "car_id",
+  "customerId": "customer_id",
+  "requestedDate": "2024-03-20T10:00:00Z",
+  "status": "pending",
+  "message": "Interested in test driving this vehicle"
 }
 ```
 
@@ -114,6 +168,7 @@ Response:
 - JWT tokens for authentication
 - Environment variables for sensitive data
 - Input validation and sanitization
+- Role-based access control
 
 ## 🧪 Testing
 
