@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 
 // Placeholder route
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.send('Car Dealership API');
 });
 
