@@ -3,6 +3,15 @@ import jwt from 'jsonwebtoken';
 import { Manager, IManager } from '../models/Manager';
 import { Customer, ICustomer } from '../models/Customer';
 
+// Helper function to get JWT secret
+const getJwtSecret = (): string => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error('JWT_SECRET environment variable is not set');
+  }
+  return secret;
+};
+
 export const registerManager = async (managerData: Partial<IManager>) => {
   const { name, email, password } = managerData;
   
@@ -19,7 +28,7 @@ export const registerManager = async (managerData: Partial<IManager>) => {
   // Generate token
   const token = jwt.sign(
     { id: manager._id, role: 'manager' },
-    process.env.JWT_SECRET || 'supersecretkey',
+    getJwtSecret(),
     { expiresIn: '24h' }
   );
 
@@ -42,7 +51,7 @@ export const loginManager = async (email: string, password: string) => {
   // Generate token
   const token = jwt.sign(
     { id: manager._id, role: 'manager' },
-    process.env.JWT_SECRET || 'supersecretkey',
+    getJwtSecret(),
     { expiresIn: '24h' }
   );
 
@@ -65,7 +74,7 @@ export const registerCustomer = async (customerData: Partial<ICustomer>) => {
   // Generate token
   const token = jwt.sign(
     { id: customer._id, role: 'customer' },
-    process.env.JWT_SECRET || 'supersecretkey',
+    getJwtSecret(),
     { expiresIn: '24h' }
   );
 
@@ -88,7 +97,7 @@ export const loginCustomer = async (email: string, password: string) => {
   // Generate token
   const token = jwt.sign(
     { id: customer._id, role: 'customer' },
-    process.env.JWT_SECRET || 'supersecretkey',
+    getJwtSecret(),
     { expiresIn: '24h' }
   );
 
@@ -108,7 +117,7 @@ export const login = async (email: string, password: string) => {
 
   const token = jwt.sign(
     { id: manager._id, email: manager.email, role: manager.role },
-    process.env.JWT_SECRET || 'supersecretkey',
+    getJwtSecret(),
     { expiresIn: '24h' }
   );
 
@@ -134,7 +143,7 @@ export const register = async (managerData: Partial<IManager>) => {
 
   const token = jwt.sign(
     { id: manager._id, email: manager.email, role: manager.role },
-    process.env.JWT_SECRET || 'supersecretkey',
+    getJwtSecret(),
     { expiresIn: '24h' }
   );
 
