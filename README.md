@@ -5,7 +5,7 @@ Build a simple RESTful API for a car dealership to manage cars, categories, and 
 ## 🔗 Quick Links
 
 - **Live API**: [https://vobb-api.render.com](https://vobb-api.render.com)
-- **API Documentation**: [Postman Collection](https://documenter.getpostman.com/view/your-collection-id) 
+- **API Documentation**: [Postman Collection](https://documenter.getpostman.com/view/29992846/2sB2qgcxL8) 
 
 ## 🚀 Features
 
