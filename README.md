@@ -141,26 +141,6 @@ PUT    /api/customers/:id       - Update customer profile
 DELETE /api/customers/:id       - Delete customer account
 ```
 
-### Bookings/Inquiries
-
-```http
-POST   /api/bookings           - Create a booking request
-GET    /api/bookings           - Get all bookings (Manager sees all, Customer sees own)
-GET    /api/bookings/:id       - Get specific booking details
-PUT    /api/bookings/:id       - Update booking status (Manager only)
-DELETE /api/bookings/:id       - Cancel booking
-```
-
-#### Example Booking Request Body
-```json
-{
-  "carId": "car_id",
-  "customerId": "customer_id",
-  "requestedDate": "2024-03-20T10:00:00Z",
-  "status": "pending",
-  "message": "Interested in test driving this vehicle"
-}
-```
 
 ## 🔒 Security
 

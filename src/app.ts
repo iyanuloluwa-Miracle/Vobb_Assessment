@@ -6,6 +6,7 @@ import carRoutes from './routes/carRoutes';
 import managerRoutes from './routes/managerRoutes';
 import authRoutes from './routes/authRoutes';
 import categoryRoutes from './routes/categoryRoutes';
+import customerRoutes from './routes/customerRoutes';
 import { connectDB } from './database/connection';
 
 // Load environment variables
@@ -29,5 +30,6 @@ app.use('/api/cars', carRoutes);
 app.use('/api/managers', managerRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/customers', customerRoutes);
 
 export default app; 
