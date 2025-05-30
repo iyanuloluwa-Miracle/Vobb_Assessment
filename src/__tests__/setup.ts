@@ -1,7 +1,10 @@
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
 let mongod: MongoMemoryServer;
+
+// Set up JWT secret for auth tests
+process.env.JWT_SECRET = 'test-secret-key';
 
 // Connect to the in-memory database before running tests
 beforeAll(async () => {
@@ -19,8 +22,18 @@ afterEach(async () => {
   }
 });
 
-// Close database connection after all tests
+// Cleanup after tests
 afterAll(async () => {
-  await mongoose.connection.close();
-  await mongod.stop();
+  if (mongod) {
+    await mongoose.connection.dropDatabase();
+    await mongoose.connection.close();
+    await mongod.stop();
+  }
+});
+
+// Add a dummy test to prevent the "Your test suite must contain at least one test" error
+describe('Database Setup', () => {
+  it('should connect to the database', () => {
+    expect(mongoose.connection.readyState).toBe(1);
+  });
 }); 
