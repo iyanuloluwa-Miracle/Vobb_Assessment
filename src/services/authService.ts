@@ -25,14 +25,7 @@ export const registerManager = async (managerData: Partial<IManager>) => {
   const manager = new Manager({ name, email, password });
   await manager.save();
 
-  // Generate token
-  const token = jwt.sign(
-    { id: manager._id, role: 'manager' },
-    getJwtSecret(),
-    { expiresIn: '24h' }
-  );
-
-  return { manager, token };
+  return { manager };
 };
 
 export const loginManager = async (email: string, password: string) => {
@@ -71,14 +64,7 @@ export const registerCustomer = async (customerData: Partial<ICustomer>) => {
   const customer = new Customer({ name, email, password });
   await customer.save();
 
-  // Generate token
-  const token = jwt.sign(
-    { id: customer._id, role: 'customer' },
-    getJwtSecret(),
-    { expiresIn: '24h' }
-  );
-
-  return { customer, token };
+  return { customer };
 };
 
 export const loginCustomer = async (email: string, password: string) => {

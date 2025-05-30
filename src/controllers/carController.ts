@@ -3,10 +3,21 @@ import * as carService from '../services/carService';
 
 export const createCar = async (req: Request, res: Response): Promise<void> => {
   try {
+    console.log('Creating car with data:', JSON.stringify(req.body, null, 2));
     const car = await carService.createCar(req.body);
+    console.log('Car created successfully:', JSON.stringify(car, null, 2));
     res.status(201).json(car);
-  } catch (error) {
-    res.status(400).json({ error: 'Failed to create car' });
+  } catch (error: any) {
+    console.error('Error creating car:', {
+      message: error.message,
+      stack: error.stack,
+      requestBody: req.body
+    });
+    res.status(400).json({ 
+      error: 'Failed to create car',
+      details: error.message,
+      validationErrors: error.errors || undefined
+    });
   }
 };
 

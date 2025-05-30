@@ -3,8 +3,8 @@ import * as authService from '../services/authService';
 
 export const registerManager = async (req: Request, res: Response) => {
   try {
-    const { manager, token } = await authService.registerManager(req.body);
-    res.status(201).json({ manager, token });
+    const { manager } = await authService.registerManager(req.body);
+    res.status(201).json({ manager });
   } catch (err: any) {
     res.status(400).json({ error: err.message });
   }
@@ -22,8 +22,8 @@ export const loginManager = async (req: Request, res: Response) => {
 
 export const registerCustomer = async (req: Request, res: Response) => {
   try {
-    const { customer, token } = await authService.registerCustomer(req.body);
-    res.status(201).json({ customer, token });
+    const { customer } = await authService.registerCustomer(req.body);
+    res.status(201).json({ customer });
   } catch (err: any) {
     res.status(400).json({ error: err.message });
   }

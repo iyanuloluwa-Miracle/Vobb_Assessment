@@ -27,7 +27,7 @@ connectDB();
 
 app.use('/api/cars', carRoutes);
 app.use('/api/managers', managerRoutes);
-app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 
 export default app; 
