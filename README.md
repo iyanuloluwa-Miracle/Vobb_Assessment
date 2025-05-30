@@ -157,6 +157,36 @@ Run the test suite:
 npm test
 ```
 
+### Test Results Summary
+![Test Coverage Results](./images/test-coverage.png)
+
+- **Total Test Suites**: 3
+- **Total Tests**: 24
+  - ✅ Passed: 17 tests
+  - ❌ Failed: 7 tests (related to Car Service timeouts)
+- **Test Categories**:
+  - Authentication Service: All tests passed
+  - Category Service: All tests passed (8 tests)
+  - Car Service: Timeout issues being resolved
+
+### Test Coverage
+```
+---------------------|---------|----------|---------|---------|-----------------
+File                 | % Stmts | % Branch | % Funcs | % Lines |
+---------------------|---------|----------|---------|---------|-----------------
+All files           |   68.01 |     32.6 |   58.53 |   69.23 |
+ models             |   89.18 |        0 |     100 |   94.28 |
+ services           |   63.78 |    34.09 |   54.05 |   63.26 |
+```
+
+Key highlights:
+- Models have excellent coverage (89.18% statements, 100% functions)
+- Authentication tests are passing successfully
+- Category management tests are comprehensive and passing
+- Car service tests need timeout configuration adjustment
+
+Note: Car service tests are timing out due to MongoDB Memory Server configuration, which is being addressed. All other functionality tests are passing successfully.
+
 ## 📦 Dependencies
 
 - `express`: Web framework
